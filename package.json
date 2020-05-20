@@ -1,0 +1,27 @@
+{
+  "name": "stock-portfolio",
+  "version": "1.0.0",
+  "description": "Fullstack app that lets users simulate buying stocks with fake currency",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Momopeach1/Stock-Portfolio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Momopeach1/Stock-Portfolio/issues"
+  },
+  "homepage": "https://github.com/Momopeach1/Stock-Portfolio#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

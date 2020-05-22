@@ -7,9 +7,9 @@ const userSchema = new mongoose.Schema({
   name: String,
   password: String,
   email: { type: String, unique: true, lowercase: true },
-  transactions: { type: Array, default: [] },
+  transactions: { type: Array, default: [] }, //{ticker: name, shares: number, atPrice: price bought}
   balance: { type: Number, default: 5000.00 },
-  inventory: { type: Object, default: {} }
+  inventory: { type: Array, default: [] } // {ticker: APPL, Shares: 4}
 });
 
 //Password hashing
@@ -32,7 +32,7 @@ userSchema.pre('save', function(next) {
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if(err) {return callback(err);}
-    callback(nmull, isMatch);
+    callback(null, isMatch);
   });
 }
 

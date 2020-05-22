@@ -22,4 +22,7 @@ const mongooseOptions = {
 };
 mongoose.connect(process.env.MONGO_URI, mongooseOptions);
 
+// Controller setup
+app.use('/api', require('./controllers'));
+
 app.listen(PORT, ()=> console.log('listening on port ', PORT));

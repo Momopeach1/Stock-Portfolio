@@ -1,0 +1,17 @@
+.portfolio-container {
+  display: flex;
+  justify-content: space-between;
+  columns: 2;
+}
+
+/* Inventory container */
+.inventory-container {
+  display: flex;
+}
+
+/* Buy Menu */
+
+.buy-menu {
+  display:flex;
+  justify-content: center;
+}

@@ -3,7 +3,6 @@ const router = require('express').Router();
 const passport = require('../middlewares/authentication');
 const User = require('../models/user');
 const IEX = require('../apis/IEX');
-const axios = require('axios');
 
 // @Route GET /api/user/check
 router.get('/check', passport.isLoggedIn(), (req, res) => {
@@ -63,6 +62,41 @@ router.get('/inventory', passport.isLoggedIn(), (req, res) =>{
       res.status(500).send("INTERNAL_SERVER_ERROR: " + err);
     });
 });
+
+// @Route PUT /api/user/buy
+router.put('/buy', passport.isLoggedIn(), (req, res) => {
+  req.body.shares = parseInt(req.body.shares);
+  const newUser = { ...req.user._doc };
+  const params = {
+    types: 'quote',
+    token: process.env.API_KEY
+  };
+
+  IEX.get(`/stock/${req.body.ticker}/batch`, {params})
+    .then(result => {
+      if(result.data.quote.latestPrice * req.body.shares > newUser.balance) {
+        return res.status(400).send('Not enough money!');
+      }
+      newUser.transactions.push({ ticker: req.body.ticker, shares: req.body.shares, atPrice: result.data.quote.latestPrice });
+      newUser.balance -= req.body.shares * result.data.quote.latestPrice;
+
+      let updated = false;
+      newUser.inventory.forEach((item, i) =>{
+        if(item.ticker === req.body.ticker) {
+          newUser.inventory[i].shares += req.body.shares;
+          updated = true;
+        }
+      });
+
+      if (!updated) newUser.inventory.push({ticker: req.body.ticker, shares: req.body.shares});
+      User.updateOne({ email: newUser.email }, newUser, (userErr, userRes) =>{
+        if(userErr) return res.status(501).send(userErr);
+        res.status(200).send('updated user');
+      });
+    })
+    .catch(err => res.status(500).send(err));
+
+})
 
 // @Route POST /api/user/signin
 router.post('/signin', passport.authenticate('local'), (req, res) => {

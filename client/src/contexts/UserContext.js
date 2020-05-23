@@ -4,11 +4,11 @@ const UserContext = React.createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
-    email: null,
-    name: null,
-    transactions: null,
+    email: '',
+    name: '',
+    transactions: [],
     balance: null,
-    inventory: null
+    inventory: []
   });
 
   const [isAuth, setIsAuth] = useState(null);

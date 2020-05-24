@@ -53,9 +53,12 @@ router.get('/inventory', passport.isLoggedIn(), (req, res) =>{
   IEX.get('/stock/market/batch', {params})
     .then(result => {
       const response = [ ...inventory ];
-      console.log(response);
-      inventory.forEach((item, i) => response[i].latestPrice = result.data[item.ticker].quote.latestPrice);
-      console.log(response);
+
+      inventory.forEach((item, i) => {
+        response[i].openPrice = result.data[item.ticker].quote.open;
+        response[i].latestPrice = result.data[item.ticker].quote.latestPrice;
+      });
+
       res.json({ inventory: response });
     })
     .catch(err =>{
@@ -75,7 +78,7 @@ router.put('/buy', passport.isLoggedIn(), (req, res) => {
   IEX.get(`/stock/${req.body.ticker}/batch`, {params})
     .then(result => {
       if(result.data.quote.latestPrice * req.body.shares > newUser.balance) {
-        return res.status(400).send('Not enough money!');
+        return res.status(400).send({message:'Not enough money!'});
       }
       newUser.transactions.push({ ticker: req.body.ticker, shares: req.body.shares, atPrice: result.data.quote.latestPrice });
       newUser.balance -= req.body.shares * result.data.quote.latestPrice;
@@ -90,11 +93,11 @@ router.put('/buy', passport.isLoggedIn(), (req, res) => {
 
       if (!updated) newUser.inventory.push({ticker: req.body.ticker, shares: req.body.shares});
       User.updateOne({ email: newUser.email }, newUser, (userErr, userRes) =>{
-        if(userErr) return res.status(501).send(userErr);
+        if(userErr) return res.status(501).send({message: "Database error, update failed"});
         res.status(200).send('updated user');
       });
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => res.status(500).send({message: "IEX request failed."}));
 
 })
 

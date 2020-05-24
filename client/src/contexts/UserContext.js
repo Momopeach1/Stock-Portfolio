@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
     email: '',
     name: '',
     transactions: [],
-    balance: null,
+    balance: 0,
     inventory: []
   });
 

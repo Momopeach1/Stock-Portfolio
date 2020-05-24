@@ -40,30 +40,33 @@ return (
     <div>
       {error !== null && <div>{error}</div>}
       <form>
-        <label htmlFor="userEmail">
-          Email:
-        </label>
-        <input
-          type="email"
-          name="userEmail"
-          value = {email}
-          id="userEmail"
-          onChange = {(event) => onChangeHandler(event)}
-        />
-        <label htmlFor="userPassword">
-          Password:
-        </label>
-        <input
-          type="password"
-          name="userPassword"
-          value = {password}
-          placeholder="Password"
-          id="userPassword"
-          onChange = {(event) => onChangeHandler(event)}
-        />
-        <button onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
-          Sign in
-        </button>
+        <fieldset>
+          <legend>Sign In</legend> 
+          <label htmlFor="userEmail">
+            Email:
+          </label>
+          <input
+            type="email"
+            name="userEmail"
+            value = {email}
+            id="userEmail"
+            onChange = {(event) => onChangeHandler(event)}
+          />
+          <label htmlFor="userPassword">
+            Password:
+          </label>
+          <input
+            type="password"
+            name="userPassword"
+            value = {password}
+            placeholder="Password"
+            id="userPassword"
+            onChange = {(event) => onChangeHandler(event)}
+          />
+          <button onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
+            Sign in
+          </button>
+        </fieldset>
       </form>
       <p>
         Don't have an account?{" "}

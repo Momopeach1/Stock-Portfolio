@@ -1,17 +1,70 @@
+/* Portfolio page */
 .portfolio-container {
   display: flex;
-  justify-content: space-between;
   columns: 2;
+}
+
+.portfolio-title{
+  padding-left: 69px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: flex-end;
+  columns: 2;
+}
+.navbar-divider {
+  padding: 0 10px;
 }
 
 /* Inventory container */
 .inventory-container {
+  display: block;
+  padding: 0 20px;
+  border-right: 1px solid gray;
+  width: 100%;
+}
+
+.inventory-item {
   display: flex;
+  justify-content: space-evenly;
+  font-size: x-large;
+  font-family: monospace;
+  padding-bottom: 10px;
 }
 
 /* Buy Menu */
 
 .buy-menu {
   display:flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-size: x-large;
+  padding-right: 100px;
+  width: 100%;
+}
+
+.error-message {
+  font-size: small;
+  color: red;
+  font-family: monospace;
+}
+
+/* Transaction page */
+
+.transaction-page {
+  padding-left: 69px;
+}
+
+.transaction-log {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: x-large;
+  font-family: monospace;
+  padding-bottom: 10px;
+}
+
+.transaction-log-container {
+  width: 50%;
+  margin-top: 100px;
 }

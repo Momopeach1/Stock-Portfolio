@@ -10,6 +10,7 @@ const NavBar = () => {
     return isAuth? ( 
     <div className="navbar-container">
       <NavLink to="/transactions">Transactions</NavLink>
+      <div className="navbar-divider"> | </div>
       <NavLink to="/portfolio">Portfolio</NavLink>
     </div>
     ) : null;

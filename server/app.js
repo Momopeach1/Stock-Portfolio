@@ -25,4 +25,14 @@ mongoose.connect(process.env.MONGO_URI, mongooseOptions);
 // Controller setup
 app.use('/api', require('./controllers'));
 
+//serve static files 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+
+// all unknown routes should be handed to our react app
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
+
 app.listen(PORT, ()=> console.log('listening on port ', PORT));

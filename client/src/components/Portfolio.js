@@ -28,7 +28,7 @@ const Portfolio = () => {
       return (
         <>
         <div className="inventory-item">
-          <div className="inventory-ticker">{i.ticker} - </div>
+          <div className="inventory-ticker">{i.ticker} -> </div>
           <div className="inventory-shares"> {i.shares} Shares </div>
           <div className="inventory-price" style={{ color: getColor(i.latestPrice, i.openPrice) }}>${i.latestPrice*i.shares}</div> 
         </div>

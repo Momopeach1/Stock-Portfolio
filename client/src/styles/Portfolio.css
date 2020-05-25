@@ -10,11 +10,20 @@
 
 .navbar-container {
   display: flex;
-  justify-content: flex-end;
-  columns: 2;
+  justify-content: right;
+  width: fit-content;
+  border: 1px solid green;
+  /* border-radius: 4px; */
+  margin-left: auto;
+  color:green;
 }
+
+.nav-link {
+  margin: 2px
+}
+
 .navbar-divider {
-  padding: 0 10px;
+  padding: 0 1px;
 }
 
 /* Inventory container */

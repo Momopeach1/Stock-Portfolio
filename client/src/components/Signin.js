@@ -1,12 +1,23 @@
 import React, { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 
+//material UI
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container'; 
+
+//file imports
 import server from '../apis/server';
 import UserContext from '../contexts/UserContext';
 import history from '../utilities/history';
+import '../styles/Signin.css';
 
 const SignIn = props => {
-  console.log(props);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -34,49 +45,66 @@ const SignIn = props => {
           setPassword(value);
         }
     };
+
+
 return (
-  <div >
-    <h1>Sign In</h1>
-    <div>
-      {error !== null && <div>{error}</div>}
-      <form>
-        <fieldset>
-          <legend>Sign In</legend> 
-          <label htmlFor="userEmail">
-            Email:
-          </label>
-          <input
-            type="email"
-            name="userEmail"
-            value = {email}
-            id="userEmail"
-            onChange = {(event) => onChangeHandler(event)}
-          />
-          <label htmlFor="userPassword">
-            Password:
-          </label>
-          <input
-            type="password"
-            name="userPassword"
-            value = {password}
-            placeholder="Password"
-            id="userPassword"
-            onChange = {(event) => onChangeHandler(event)}
-          />
-          <button onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
-            Sign in
-          </button>
-        </fieldset>
+  <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <div className ="paper">
+      <Avatar className="avatar">
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Sign In
+      </Typography>
+      <form className="form" noValidate>
+        <TextField 
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="userEmail"
+          label="Email Address"
+          name="userEmail"
+          autoComplete="email"
+          autoFocus
+          type="email"
+          onChange={(event) => onChangeHandler(event)}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="userPassword"
+          label="Password"
+          type="password"
+          id="userPassword"
+          autoComplete="current-password"
+          onChange={(event) => onChangeHandler(event)}
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className="submit"
+          onClick={(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <p>
+              Don't have an account?{" "}
+              <Link to="signup" >
+                Sign up here
+              </Link>{" "}
+              </p>
+            </Grid>
+          </Grid>
       </form>
-      <p>
-        Don't have an account?{" "}
-        <Link to="signup" >
-          Sign up here
-        </Link>{" "}
-        <br />
-      </p>
     </div>
-  </div>
+  </Container>
 );
 };
 

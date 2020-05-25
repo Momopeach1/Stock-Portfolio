@@ -5,7 +5,7 @@ import server from '../apis/server';
 import '../styles/Portfolio.css';
 
 const Portfolio = () => {
-  const { user } = useContext(UserContext);
+  const { user, fetchUser } = useContext(UserContext);
   const [invValue, setInvValue] = useState(null);
   const [inventory, setInventory] = useState([]);
   const [err, setErr] = useState('');
@@ -50,6 +50,7 @@ const Portfolio = () => {
       .then(() => {
         portValue();
         setErr('');
+        fetchUser();
       })
       .catch(err => setErr(err.response.data.message || err.response.data));
   };

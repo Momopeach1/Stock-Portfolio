@@ -14,23 +14,19 @@ const NavBar = () => {
 
   const renderNavBar = () => {
     return isAuth? ( 
-      <ButtonGroup 
-        className="navbar-container" 
-        size="large" color="primary" 
-        aria-label="large outlined primary button group"
-        >
-        <NavLink to="/transactions">
-          <Button>Transactions</Button>
-        </NavLink>
-        <NavLink to="/portfolio">
-          <Button>Portfolio</Button>
-        </NavLink>
-      </ButtonGroup>
-    // <div className="navbar-container">
-    //   <NavLink to="/transactions">Transactions</NavLink>
-    //   <div className="navbar-divider"> | </div>
-    //   <NavLink to="/portfolio">Portfolio</NavLink>
-    // </div>
+      <div className="navbar-container" >
+        <ButtonGroup 
+          size="large" color="primary" 
+          aria-label="large outlined primary button group"
+          >
+          <NavLink to="/transactions">
+            <Button>Transactions</Button>
+          </NavLink>
+          <NavLink to="/portfolio">
+            <Button>Portfolio</Button>
+          </NavLink>
+        </ButtonGroup>
+      </div>
     ) : null;
   }
 

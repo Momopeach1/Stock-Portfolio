@@ -4,6 +4,14 @@ import UserContext from '../contexts/UserContext';
 import server from '../apis/server';
 import '../styles/Portfolio.css';
 
+import Paper from '@material-ui/core/Paper';
+import Avatar from '@material-ui/core/Avatar';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import FolderOpenOutlinedIcon from '@material-ui/icons/FolderOpenOutlined';
+import Typography from '@material-ui/core/Typography';
+
 const Portfolio = () => {
   const { user, fetchUser } = useContext(UserContext);
   const [invValue, setInvValue] = useState(null);
@@ -28,9 +36,10 @@ const Portfolio = () => {
       return (
         <>
         <div className="inventory-item">
-          <div className="inventory-ticker">{i.ticker} -> </div>
-          <div className="inventory-shares"> {i.shares} Shares </div>
-          <div className="inventory-price" style={{ color: getColor(i.latestPrice, i.openPrice) }}>${i.latestPrice*i.shares}</div> 
+          <Button variant="outlined" disabled style={{ color: getColor(i.latestPrice, i.openPrice) }} >{i.ticker}</Button>
+          <div> -> </div>
+          <div> {i.shares} Shares </div>
+          <Button variant="contained" disabled style={{ color: getColor(i.latestPrice, i.openPrice) }}>${i.latestPrice*i.shares}</Button>
         </div>
         <hr/>
         </>
@@ -46,6 +55,10 @@ const Portfolio = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if(form.shares <= 0){
+      setErr('Enter a number greater than zero!');
+      return;
+    } 
     server.put('/user/buy', form)
       .then(() => {
         portValue();
@@ -56,6 +69,7 @@ const Portfolio = () => {
   };
 
   const getColor = (latestPrice, openPrice) => {
+    console.log(latestPrice, openPrice);
     if(latestPrice === openPrice) return 'gray';
     else if(latestPrice>openPrice) return 'green';
     else return 'red';
@@ -72,29 +86,61 @@ const Portfolio = () => {
 
   return(
     <>
-    <h1 className="portfolio-title">Portfolio (${Number.parseFloat(invValue).toFixed(2)})</h1>
+    <div className="portfolio-title">
+    <FolderOpenOutlinedIcon color="green" style={{ fontSize: 50, paddingRight: 20 }} />
+    <Typography variant="h2" color="green">
+      Portfolio (${Number.parseFloat(invValue).toFixed(2)})
+    </Typography>
+    </div>
     <br/>
     <div className="portfolio-container">
       <div className="inventory-container">
         {renderInventory()}
       </div>
       <div className="buy-menu">
-        <div className="user-balance">Cash - ${Number.parseFloat(user.balance).toFixed(2)}</div>
-        <form onSubmit={handleSubmit}>
-          <fieldset>
-            <legend>Buy Menu:</legend>
+        <Paper elevation={3} className="paper">
+          <Avatar className="avatar">
+            <AttachMoneyIcon/>
+          </Avatar>
+          <div className="user-balance">Cash - ${Number.parseFloat(user.balance).toFixed(2)}</div>
+          <form onSubmit={handleSubmit} className="form" noValidate>
             <div className="error-message">{err}</div>
-            <label htmlFor="ticker" >Ticker </label>
-            <input onChange={handleInputChange} name="ticker" id="ticker" type="text" />
-            <br/>
-            <label htmlFor="shares" >Shares </label>
-            <input min="1" onChange={handleInputChange} id="shares" name="shares" type="number"/>
-            <br/>
-            <button>BUY</button>
-          </fieldset>
-        </form>
+            <TextField 
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Ticker"
+              name="ticker" 
+              id="ticker" 
+              type="text"
+              autoFocus
+              onChange={handleInputChange} 
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Amount of shares"
+              min="1" 
+              id="shares" 
+              name="shares" 
+              type="number"
+              onChange={handleInputChange} 
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className="submit">
+                Buy Stock(s)
+              </Button>
+          </form>
+        </Paper>
       </div>
-    </div>
+    </div> 
     </>
   )
 }

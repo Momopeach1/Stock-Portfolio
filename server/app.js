@@ -3,6 +3,7 @@ const app = express();
 const mongoose  = require('mongoose');
 const PORT = process.env.PORT || 8080;
 const expressSession = require('express-session');
+const path = require('path');
 
 //Middlewares and controllers
 const passport       = require('./middlewares/authentication');

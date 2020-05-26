@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react';
 
 import UserContext from '../contexts/UserContext';
 import server from '../apis/server';
@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 
 const Portfolio = () => {
   const { user, fetchUser } = useContext(UserContext);
-  const [invValue, setInvValue] = useState(null);
+  const [invValue, setInvValue] = useState(0);
   const [inventory, setInventory] = useState([]);
   const [err, setErr] = useState('');
   const [form, setForm] = useState({ ticker: '', shares: 0 });
@@ -22,13 +22,12 @@ const Portfolio = () => {
   const portValue = () => {
     server.get('/user/inventory')
       .then(result => {
-        console.log(result.data);
         let sum = 0;
         result.data.inventory.forEach(d => sum += d.latestPrice* d.shares);
         setInvValue(sum);
         setInventory(result.data.inventory);
       })
-      .catch(() => console.log('asdfsdfsd'));
+      .catch(() => console.log('Error retreving inventory'));
   }
 
   const renderInventory = () => {
@@ -36,10 +35,16 @@ const Portfolio = () => {
       return (
         <>
         <div className="inventory-item">
-          <Button variant="outlined" disabled style={{ color: getColor(i.latestPrice, i.openPrice) }} >{i.ticker}</Button>
+          <Button variant="outlined" disabled style={{ color: getColor(i.latestPrice, i.openPrice, i.change) }} >{i.ticker}</Button>
           <div> -> </div>
           <div> {i.shares} Shares </div>
-          <Button variant="contained" disabled style={{ color: getColor(i.latestPrice, i.openPrice) }}>${i.latestPrice*i.shares}</Button>
+          <Button 
+          variant="contained" 
+          disabled 
+          style={{ color: getColor(i.latestPrice, i.openPrice, i.change) }}
+          >
+            ${Number.parseFloat(i.latestPrice*i.shares).toFixed(2)}
+          </Button>
         </div>
         <hr/>
         </>
@@ -68,19 +73,37 @@ const Portfolio = () => {
       .catch(err => setErr(err.response.data.message || err.response.data));
   };
 
-  const getColor = (latestPrice, openPrice) => {
-    console.log(latestPrice, openPrice);
-    if(latestPrice === openPrice) return 'gray';
-    else if(latestPrice>openPrice) return 'green';
-    else return 'red';
+  //OpenPrice is null at times for IEX so we can use change if that happens
+  const getColor = (latestPrice, openPrice, change) => {
+    console.log(latestPrice, openPrice, change);
+    if(openPrice){
+      if(latestPrice === openPrice) return 'gray';
+      else if(latestPrice>openPrice) return 'green';
+      else return 'red';
+    } else{
+      if(change>0) return 'green';
+      else if (change <0) return 'red';
+      else return 'gray';
+    }
   };
 
 
 
   useEffect(() => {
     portValue();
-    return () => { setErr(''); };
+    //updated the portfolio every x seconds to reflect stock changes
+    const interval = setInterval(() => {
+      portValue();
+    }, 5000);
+
+    return () => { 
+      setErr('');
+      clearInterval(interval); 
+    };
   }, [])
+
+  
+  
 
 
 

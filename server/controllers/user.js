@@ -56,6 +56,7 @@ router.get('/inventory', passport.isLoggedIn(), (req, res) =>{
 
       inventory.forEach((item, i) => {
         response[i].openPrice = result.data[item.ticker].quote.open;
+        response[i].change = result.data[item.ticker].quote.change;
         response[i].latestPrice = result.data[item.ticker].quote.latestPrice;
       });
 
